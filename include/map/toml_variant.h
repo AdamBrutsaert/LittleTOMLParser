@@ -27,7 +27,7 @@ toml_variant_t toml_variant_create_integer(toml_integer_t value);
 toml_variant_t toml_variant_create_float(toml_float_t value);
 toml_variant_t toml_variant_create_boolean(toml_boolean_t value);
 toml_variant_t toml_variant_create_string(toml_string_t value);
-toml_variant_t toml_variant_create_array();
-toml_variant_t toml_variant_create_map();
+toml_variant_t toml_variant_create_array(toml_array_t value);
+toml_variant_t toml_variant_create_map(toml_map_t value);
 
 void toml_variant_destroy(toml_variant_t variant);

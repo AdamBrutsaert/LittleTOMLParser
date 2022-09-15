@@ -9,7 +9,8 @@ NAME := toml-c-parser
 SRC  := main.c \
         utils/my_min_size.c utils/my_memmove.c utils/my_strhash.c \
         utils/my_strlen.c utils/my_strcpy.c utils/my_strcmp.c \
-		map/toml_variant.c
+		utils/my_strdup.c \
+        map/toml_variant.c map/toml_array.c
 OBJ  := $(SRC:%.c=%.o)
 
 # Adjustement
@@ -31,7 +32,7 @@ $(NAME): $(OBJ)
 	@$(CC) -o$@ $^ $(LDFLAGS) $(LDLIBS)
 
 $(BUILD_INTERMEDIATES_DIR)/%.o: $(SRC_DIR)/%.c
-	@echo "Compiling $^..."
+	@echo "Compiling $<..."
 	@mkdir -p $(dir $@)
 	@$(CC) -c $(CPPFLAGS) $(CFLAGS) -o$@ $<
 
@@ -48,7 +49,7 @@ re: fclean all
 run: all
 	@$(NAME)
 
-check:
+check: all
 	@valgrind --leak-check=yes $(NAME)
 
 .PHONY: all clean fclean re run check

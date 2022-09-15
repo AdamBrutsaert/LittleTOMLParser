@@ -1,5 +1,7 @@
 #pragma once
 
+#include <stddef.h>
+
 #define nullptr (void*)0
 #define true 1
 #define false 0
