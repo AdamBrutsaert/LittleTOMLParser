@@ -1,24 +1,27 @@
 # Directories
-SRC_DIR 				:= ./src
-INCLUDE_DIR 			:= ./include
+SRC_DIR                 := ./src
+INCLUDE_DIR             := ./include
 BUILD_INTERMEDIATES_DIR := ./build-intermediates
-BUILD_DIR 				:= ./build
+BUILD_DIR               := ./build
 
 # Target
-NAME 	:= toml-c-parser
-SRC 	:= main.c
-OBJ		:= $(SRC:%.c=%.o)
+NAME := toml-c-parser
+SRC  := main.c \
+        utils/my_min_size.c utils/my_memmove.c utils/my_strhash.c \
+        utils/my_strlen.c utils/my_strcpy.c utils/my_strcmp.c \
+		map/toml_variant.c
+OBJ  := $(SRC:%.c=%.o)
 
 # Adjustement
-NAME 	:= $(BUILD_DIR)/$(NAME)
-SRC 	:= $(addprefix $(SRC_DIR)/, $(SRC))
-OBJ 	:= $(addprefix $(BUILD_INTERMEDIATES_DIR)/, $(OBJ))
+NAME := $(BUILD_DIR)/$(NAME)
+SRC  := $(addprefix $(SRC_DIR)/, $(SRC))
+OBJ  := $(addprefix $(BUILD_INTERMEDIATES_DIR)/, $(OBJ))
 
 # Compiler
-CFLAGS 		+= -std=c99 -Wall -Wextra -Wpedantic
-CPPFLAGS 	+= -I$(INCLUDE_DIR)
-#LDFLAGS 	 =
-#LDLIBS		 =
+CFLAGS   += -std=c99 -Wall -Wextra -Wpedantic
+CPPFLAGS += -I$(INCLUDE_DIR)
+#LDFLAGS   =
+#LDLIBS    =
 
 all: $(NAME)
 
