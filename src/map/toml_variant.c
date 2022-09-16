@@ -4,6 +4,7 @@
 
 #include "utils/my_lib.h"
 #include "map/toml_array.h"
+#include "map/toml_map.h"
 
 toml_variant_t toml_variant_create_integer(toml_integer_t value)
 {
@@ -60,6 +61,6 @@ void toml_variant_destroy(toml_variant_t variant)
     } else if (variant.type == TOML_VARIANT_TYPE_ARRAY) {
         toml_array_destroy(variant.as.array);
     } else if (variant.type == TOML_VARIANT_TYPE_MAP) {
-        // TODO destroy map
+        toml_map_destroy(variant.as.map);
     }
 }
