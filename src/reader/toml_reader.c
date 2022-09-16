@@ -9,6 +9,10 @@ struct toml_reader {
     toml_string_t filename;
     FILE *file;
 
+    toml_boolean_t new_line;
+    size_t line;
+    size_t column;
+
     toml_boolean_t reached_end;
     size_t capacity;
     size_t length;
@@ -35,6 +39,10 @@ toml_reader_t toml_reader_create(toml_string_t filename)
     reader->filename = filename;
     reader->file = fopen(filename, "r");
 
+    reader->new_line = false;
+    reader->line = 1;
+    reader->column = 0;
+
     if (reader->file == nullptr) {
         reader->reached_end = true;
         reader->buffer = nullptr;
@@ -42,11 +50,12 @@ toml_reader_t toml_reader_create(toml_string_t filename)
     }
 
     reader->reached_end = false;
-    reader->capacity = 4;
+    reader->capacity = 256;
     reader->length = 0;
     reader->index = 0;
     reader->buffer = malloc(reader->capacity * sizeof(char));
     read_some(reader, 0);
+
     return reader;
 }
 
@@ -58,34 +67,43 @@ void toml_reader_destroy(toml_reader_t reader)
     free(reader);
 }
 
+size_t toml_reader_get_line(toml_reader_t reader)
+{
+    return reader->line;
+}
+
+size_t toml_reader_get_column(toml_reader_t reader)
+{
+    return reader->column;
+}
+
 toml_boolean_t toml_reader_reached_end(toml_reader_t reader)
 {
     return reader->reached_end;
 }
 
-char toml_reader_consume(toml_reader_t reader, size_t offset)
+char toml_reader_next(toml_reader_t reader)
 {
-    // return 0 if we reached end
-    reader->reached_end = will_reach_end(reader, 0);
     if (reader->reached_end)
         return 0;
 
-    // consume k - 1 tokens while checking if we reached end
-    for (; offset; offset--) {
-        if (reader->index == reader->length)
-            read_some(reader, 0);
-        
-        reader->index++;
-    
-        reader->reached_end = will_reach_end(reader, 0);
-        if (reader->reached_end)
-            return 0;
+    if (reader->new_line) {
+        reader->new_line = false;
+        reader->line++;
+        reader->column = 0;
     }
+    
+    char c = reader->buffer[reader->index++];
+    reader->reached_end = will_reach_end(reader, 0);
 
     if (reader->index == reader->length)
         read_some(reader, 0);
-    
-    return reader->buffer[reader->index++];
+
+    reader->column++;
+    if (c == '\n')
+        reader->new_line = true;
+
+    return c;
 }
 
 char toml_reader_peek(toml_reader_t reader, size_t offset)

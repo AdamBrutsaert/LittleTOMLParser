@@ -13,6 +13,6 @@ For now, this parser won't be able to parse neither UTF-8 encoded string nor dat
 - [x] Variant
 - [x] Array
 - [x] Map
-- [ ] Reader
+- [x] Reader
 - [ ] Tokenizer
 - [ ] Parser
