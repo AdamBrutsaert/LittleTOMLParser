@@ -9,7 +9,6 @@ struct toml_reader {
     toml_string_t filename;
     FILE *file;
 
-    toml_boolean_t new_line;
     size_t line;
     size_t column;
 
@@ -39,9 +38,8 @@ toml_reader_t toml_reader_create(toml_string_t filename)
     reader->filename = filename;
     reader->file = fopen(filename, "r");
 
-    reader->new_line = false;
     reader->line = 1;
-    reader->column = 0;
+    reader->column = 1;
 
     if (reader->file == nullptr) {
         reader->reached_end = true;
@@ -82,26 +80,28 @@ toml_boolean_t toml_reader_reached_end(toml_reader_t reader)
     return reader->reached_end;
 }
 
+static inline void on_new_character(toml_reader_t reader, char c)
+{
+    if (c == '\n') {
+        reader->line++;
+        reader->column = 1;
+    } else {
+        reader->column++;
+    }
+}
+
 char toml_reader_next(toml_reader_t reader)
 {
     if (reader->reached_end)
         return 0;
 
-    if (reader->new_line) {
-        reader->new_line = false;
-        reader->line++;
-        reader->column = 0;
-    }
-    
     char c = reader->buffer[reader->index++];
     reader->reached_end = will_reach_end(reader, 0);
 
     if (reader->index == reader->length)
         read_some(reader, 0);
 
-    reader->column++;
-    if (c == '\n')
-        reader->new_line = true;
+    on_new_character(reader, c);
 
     return c;
 }
