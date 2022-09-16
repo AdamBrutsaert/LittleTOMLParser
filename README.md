@@ -1,6 +1,7 @@
 # Introduction
 
-This project is an implementation of a TOML parser in C for learning purposes.
+This project is an implementation of a TOML parser in C for learning purposes.  
+Moreover, I try to follow Epitech C Coding Style.
 
 # Limitations
 

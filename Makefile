@@ -10,7 +10,8 @@ SRC  := main.c \
         utils/my_min_size.c utils/my_memmove.c utils/my_memset.c \
         utils/my_strhash.c utils/my_strlen.c utils/my_strcpy.c \
         utils/my_strcmp.c utils/my_strdup.c \
-        map/toml_variant.c map/toml_array.c map/toml_map.c
+        map/toml_variant.c map/toml_array.c map/toml_map.c \
+		reader/toml_reader.c
 OBJ  := $(SRC:%.c=%.o)
 
 # Adjustement
