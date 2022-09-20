@@ -3,6 +3,9 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+// TODO : Push doesn't need to reallocate
+// TODO : Push and PrintError doesn't need to be exposed
+
 struct toml_tokenizer {
     toml_reader_t reader;
     
@@ -31,6 +34,7 @@ static void on_equal(toml_tokenizer_t tokenizer)
 
 static void on_double_quote(toml_tokenizer_t tokenizer)
 {
+    // TODO handle triple quote 
     size_t capacity = 8;
     size_t length = 0;
     toml_string_t string = malloc(capacity * sizeof(char));
@@ -59,6 +63,42 @@ static void on_double_quote(toml_tokenizer_t tokenizer)
     toml_tokenizer_push(tokenizer, toml_token_create_string(string));
 }
 
+static void on_comma(toml_tokenizer_t tokenizer)
+{
+    toml_tokenizer_push(tokenizer, toml_token_create_comma());
+    toml_reader_next(tokenizer->reader);
+}
+
+static void on_dot(toml_tokenizer_t tokenizer)
+{
+    toml_tokenizer_push(tokenizer, toml_token_create_dot());
+    toml_reader_next(tokenizer->reader);
+}
+
+static void on_lbracket(toml_tokenizer_t tokenizer)
+{
+    toml_tokenizer_push(tokenizer, toml_token_create_lbracket());
+    toml_reader_next(tokenizer->reader);
+}
+
+static void on_rbracket(toml_tokenizer_t tokenizer)
+{
+    toml_tokenizer_push(tokenizer, toml_token_create_rbracket());
+    toml_reader_next(tokenizer->reader);
+}
+
+static void on_lbrace(toml_tokenizer_t tokenizer)
+{
+    toml_tokenizer_push(tokenizer, toml_token_create_lbrace());
+    toml_reader_next(tokenizer->reader);
+}
+
+static void on_rbrace(toml_tokenizer_t tokenizer)
+{
+    toml_tokenizer_push(tokenizer, toml_token_create_rbrace());
+    toml_reader_next(tokenizer->reader);
+}
+
 static void on_default(toml_tokenizer_t tokenizer)
 {
     size_t capacity = 8;
@@ -68,7 +108,9 @@ static void on_default(toml_tokenizer_t tokenizer)
     while (!toml_reader_reached_end(tokenizer->reader)) {
         char c = toml_reader_peek(tokenizer->reader, 0);
 
-        if (c == ' ' || c == '\t' || c == '\r' || c == '\n')
+        if (c == ' ' || c == '\t' || c == '\r' || c == '\n'
+            || c == ',' || c == '.' || c == '[' || c == ']'
+            || c == '{' || c == '}')
             break;
 
         if (capacity == length) {
@@ -117,6 +159,30 @@ static void tokenize_some(toml_tokenizer_t tokenizer)
             
             case '"':
                 on_double_quote(tokenizer);
+                break;
+
+            case '.':
+                on_dot(tokenizer);
+                break;
+                
+            case ',':
+                on_comma(tokenizer);
+                break;
+
+            case '[':
+                on_lbracket(tokenizer);
+                break;
+
+            case ']':
+                on_rbracket(tokenizer);
+                break;
+
+            case '{':
+                on_lbrace(tokenizer);
+                break;
+
+            case '}':
+                on_rbrace(tokenizer);
                 break;
                 
             default:

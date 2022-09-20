@@ -14,5 +14,5 @@ For now, this parser won't be able to parse neither UTF-8 encoded string nor dat
 - [x] Array
 - [x] Map
 - [x] Reader
-- [ ] Tokenizer
+- [x] Tokenizer
 - [ ] Parser

@@ -11,7 +11,7 @@ SRC  := main.c \
         utils/my_strhash.c utils/my_strlen.c utils/my_strcpy.c \
         utils/my_strcmp.c utils/my_strdup.c \
         map/toml_variant.c map/toml_array.c map/toml_map.c \
-		reader/toml_reader.c \
+        reader/toml_reader.c \
         tokenizer/toml_tokenizer.c tokenizer/toml_token.c
 OBJ  := $(SRC:%.c=%.o)
 
@@ -24,7 +24,7 @@ OBJ  := $(addprefix $(BUILD_INTERMEDIATES_DIR)/, $(OBJ))
 CFLAGS   += -std=c99 -Wall -Wextra -Wpedantic
 CPPFLAGS += -I$(INCLUDE_DIR)
 #LDFLAGS   =
-#LDLIBS    =
+#LDLIBS    = 
 
 all: $(NAME)
 

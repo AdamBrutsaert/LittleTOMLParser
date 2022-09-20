@@ -1,2 +1,8 @@
-vartest = 345
-test = "hello"
+[General]
+
+my_integer = 345
+my_boolean = true
+my_string = "Heyyy"
+
+my.map = { test = 3 }
+my . "array" = [ 3, "test"]
