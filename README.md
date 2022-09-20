@@ -5,7 +5,7 @@ Moreover, I try to follow Epitech C Coding Style.
 
 # Limitations
 
-For now, this parser won't be able to parse neither UTF-8 encoded string nor date and time.
+For now, this parser won't be able to parse neither UTF-8 encoded string, multi-line string nor date and time.
 
 # Implementation Step
 

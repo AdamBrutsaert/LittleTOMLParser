@@ -6,13 +6,13 @@ BUILD_DIR               := ./build
 
 # Target
 NAME := toml-c-parser
-SRC  := main.c \
-        utils/my_min_size.c utils/my_memmove.c utils/my_memset.c \
-        utils/my_strhash.c utils/my_strlen.c utils/my_strcpy.c \
-        utils/my_strcmp.c utils/my_strdup.c \
-        map/toml_variant.c map/toml_array.c map/toml_map.c \
-        reader/toml_reader.c \
-        tokenizer/toml_tokenizer.c tokenizer/toml_token.c
+SRC  := main.c
+SRC  += utils/my_memmove.c utils/my_memset.c \
+        utils/my_strhash.c utils/my_strlen.c utils/my_strcmp.c \
+        utils/my_strcpy.c utils/my_strdup.c
+SRC  += toml/variant.c toml/array.c toml/map.c 
+SRC  += toml/reader.c
+SRC  += toml/token.c toml/tokenizer.c
 OBJ  := $(SRC:%.c=%.o)
 
 # Adjustement

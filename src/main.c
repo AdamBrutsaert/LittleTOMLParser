@@ -1,6 +1,4 @@
-#include <stdio.h>
-
-#include "tokenizer/toml_tokenizer.h"
+#include "toml/tokenizer.h"
 
 int main()
 {

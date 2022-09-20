@@ -1,8 +1,10 @@
-#include "tokenizer/toml_token.h"
+#include "toml/token.h"
 
 #include <stdlib.h>
 
-toml_token_t toml_token_create_string(toml_string_t buffer)
+#include "toml/type.h"
+
+toml_token_t toml_token_create_string(char *buffer)
 {
     return (toml_token_t) {
         .type = TOML_TOKEN_TYPE_STRING,

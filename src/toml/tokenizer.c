@@ -1,10 +1,7 @@
-#include "tokenizer/toml_tokenizer.h"
+#include "toml/tokenizer.h"
 
 #include <stdlib.h>
 #include <stdio.h>
-
-// TODO : Push doesn't need to reallocate
-// TODO : Push and PrintError doesn't need to be exposed
 
 struct toml_tokenizer {
     toml_reader_t reader;
@@ -15,6 +12,11 @@ struct toml_tokenizer {
     toml_token_t *tokens;
 };
 
+static void push_token(toml_tokenizer_t tokenizer, toml_token_t token)
+{
+    tokenizer->tokens[tokenizer->length++] = token;
+}
+
 static void on_whitespace(toml_tokenizer_t tokenizer)
 {
     toml_reader_next(tokenizer->reader);
@@ -22,13 +24,13 @@ static void on_whitespace(toml_tokenizer_t tokenizer)
 
 static void on_newline(toml_tokenizer_t tokenizer)
 {
-    toml_tokenizer_push(tokenizer, toml_token_create_newline());
+    push_token(tokenizer, toml_token_create_newline());
     toml_reader_next(tokenizer->reader);
 }
 
 static void on_equal(toml_tokenizer_t tokenizer)
 {
-    toml_tokenizer_push(tokenizer, toml_token_create_equal());
+    push_token(tokenizer, toml_token_create_equal());
     toml_reader_next(tokenizer->reader);
 }
 
@@ -60,42 +62,42 @@ static void on_double_quote(toml_tokenizer_t tokenizer)
     }
     string[length++] = '\0';
 
-    toml_tokenizer_push(tokenizer, toml_token_create_string(string));
+    push_token(tokenizer, toml_token_create_string(string));
 }
 
 static void on_comma(toml_tokenizer_t tokenizer)
 {
-    toml_tokenizer_push(tokenizer, toml_token_create_comma());
+    push_token(tokenizer, toml_token_create_comma());
     toml_reader_next(tokenizer->reader);
 }
 
 static void on_dot(toml_tokenizer_t tokenizer)
 {
-    toml_tokenizer_push(tokenizer, toml_token_create_dot());
+    push_token(tokenizer, toml_token_create_dot());
     toml_reader_next(tokenizer->reader);
 }
 
 static void on_lbracket(toml_tokenizer_t tokenizer)
 {
-    toml_tokenizer_push(tokenizer, toml_token_create_lbracket());
+    push_token(tokenizer, toml_token_create_lbracket());
     toml_reader_next(tokenizer->reader);
 }
 
 static void on_rbracket(toml_tokenizer_t tokenizer)
 {
-    toml_tokenizer_push(tokenizer, toml_token_create_rbracket());
+    push_token(tokenizer, toml_token_create_rbracket());
     toml_reader_next(tokenizer->reader);
 }
 
 static void on_lbrace(toml_tokenizer_t tokenizer)
 {
-    toml_tokenizer_push(tokenizer, toml_token_create_lbrace());
+    push_token(tokenizer, toml_token_create_lbrace());
     toml_reader_next(tokenizer->reader);
 }
 
 static void on_rbrace(toml_tokenizer_t tokenizer)
 {
-    toml_tokenizer_push(tokenizer, toml_token_create_rbrace());
+    push_token(tokenizer, toml_token_create_rbrace());
     toml_reader_next(tokenizer->reader);
 }
 
@@ -128,7 +130,7 @@ static void on_default(toml_tokenizer_t tokenizer)
     }
     string[length++] = '\0';
 
-    toml_tokenizer_push(tokenizer, toml_token_create_string(string));
+    push_token(tokenizer, toml_token_create_string(string));
 }
 
 static void tokenize_some(toml_tokenizer_t tokenizer)
@@ -138,7 +140,7 @@ static void tokenize_some(toml_tokenizer_t tokenizer)
 
     while (tokenizer->length < tokenizer->capacity) {
         if (toml_reader_reached_end(tokenizer->reader)) {
-            toml_tokenizer_push(tokenizer, toml_token_create_end_of_file());
+            push_token(tokenizer, toml_token_create_end_of_file());
             return;
         }
 
@@ -207,24 +209,6 @@ void toml_tokenizer_destroy(toml_tokenizer_t tokenizer)
 {
     free(tokenizer->tokens);
     free(tokenizer);
-}
-
-void toml_tokenizer_push(toml_tokenizer_t tokenizer, toml_token_t token)
-{
-    if (tokenizer->length == tokenizer->capacity) {
-        tokenizer->capacity *= 2;
-        tokenizer->tokens = realloc(tokenizer->tokens, tokenizer->capacity * sizeof(toml_token_t));
-    }
-
-    tokenizer->tokens[tokenizer->length++] = token;
-}
-
-void toml_tokenizer_print_error(toml_tokenizer_t tokenizer, toml_string_t msg)
-{
-    toml_string_t filename = toml_reader_get_filename(tokenizer->reader);
-    size_t line = toml_reader_get_line(tokenizer->reader);
-    size_t column = toml_reader_get_column(tokenizer->reader);
-    fprintf(stderr, "[%s:%lu:%lu] Error: %s\n", filename, line, column, msg);
 }
 
 toml_token_t toml_tokenizer_next(toml_tokenizer_t tokenizer)

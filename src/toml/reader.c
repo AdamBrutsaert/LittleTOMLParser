@@ -1,4 +1,4 @@
-#include "reader/toml_reader.h"
+#include "toml/reader.h"
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -6,13 +6,13 @@
 #include "utils/my_lib.h"
 
 struct toml_reader {
-    toml_string_t filename;
+    char const *filename;
     FILE *file;
 
     size_t line;
     size_t column;
-
     toml_boolean_t reached_end;
+
     size_t capacity;
     size_t length;
     size_t index;
@@ -31,7 +31,7 @@ static void read_some(toml_reader_t reader, size_t offset)
     reader->reached_end = will_reach_end(reader, 0);
 }
 
-toml_reader_t toml_reader_create(toml_string_t filename)
+toml_reader_t toml_reader_create(char const *filename)
 {
     toml_reader_t reader = malloc(sizeof(struct toml_reader));
 
@@ -40,6 +40,7 @@ toml_reader_t toml_reader_create(toml_string_t filename)
 
     reader->line = 1;
     reader->column = 1;
+    
 
     if (reader->file == nullptr) {
         reader->reached_end = true;
@@ -65,7 +66,7 @@ void toml_reader_destroy(toml_reader_t reader)
     free(reader);
 }
 
-toml_string_t toml_reader_get_filename(toml_reader_t reader)
+char const *toml_reader_get_filename(toml_reader_t reader)
 {
     return reader->filename;
 }

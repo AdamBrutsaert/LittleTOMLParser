@@ -1,7 +1,5 @@
 #pragma once
 
-#include "map/toml_type.h"
-
 typedef enum {
     TOML_TOKEN_TYPE_STRING,
     TOML_TOKEN_TYPE_EQUAL,
@@ -17,10 +15,10 @@ typedef enum {
 
 typedef struct {
     toml_token_type_t type;
-    toml_string_t buffer;
+    char *buffer;
 } toml_token_t;
 
-toml_token_t toml_token_create_string(toml_string_t buffer);
+toml_token_t toml_token_create_string(char *buffer);
 toml_token_t toml_token_create_equal();
 toml_token_t toml_token_create_dot();
 toml_token_t toml_token_create_comma();
