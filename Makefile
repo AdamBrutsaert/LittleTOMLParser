@@ -12,9 +12,7 @@ SRC  := main.c \
         utils/my_strcmp.c utils/my_strdup.c \
         map/toml_variant.c map/toml_array.c map/toml_map.c \
 		reader/toml_reader.c \
-        tokenizer/toml_tokenizer.c tokenizer/toml_token.c tokenizer/toml_state.c \
-		tokenizer/states/toml_state_default.c  tokenizer/states/toml_state_key.c \
-		tokenizer/states/toml_state_set.c tokenizer/states/toml_state_value.c
+        tokenizer/toml_tokenizer.c tokenizer/toml_token.c
 OBJ  := $(SRC:%.c=%.o)
 
 # Adjustement

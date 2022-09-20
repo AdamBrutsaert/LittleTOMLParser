@@ -65,6 +65,11 @@ void toml_reader_destroy(toml_reader_t reader)
     free(reader);
 }
 
+toml_string_t toml_reader_get_filename(toml_reader_t reader)
+{
+    return reader->filename;
+}
+
 size_t toml_reader_get_line(toml_reader_t reader)
 {
     return reader->line;
