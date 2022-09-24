@@ -4,6 +4,14 @@
 
 #include "toml/type.h"
 
+toml_token_t toml_token_create_none()
+{
+    return (toml_token_t) {
+        .type = TOML_TOKEN_TYPE_NONE,
+        .buffer = nullptr
+    };
+}
+
 toml_token_t toml_token_create_string(char *buffer)
 {
     return (toml_token_t) {
@@ -76,14 +84,6 @@ toml_token_t toml_token_create_newline()
     };
 }
 
-toml_token_t toml_token_create_end_of_file()
-{
-    return (toml_token_t) {
-        .type = TOML_TOKEN_TYPE_END_OF_FILE,
-        .buffer = nullptr
-    };
-}
-
 void toml_token_destroy(toml_token_t token)
 {
     free(token.buffer);
@@ -95,6 +95,9 @@ void toml_token_destroy(toml_token_t token)
 void toml_token_print(toml_token_t token)
 {
     switch (token.type) {
+        case TOML_TOKEN_TYPE_NONE:
+            puts("NONE");
+            break;
         case TOML_TOKEN_TYPE_EQUAL:
             puts("EQUAL\t\t\t=");
             break;
@@ -102,28 +105,25 @@ void toml_token_print(toml_token_t token)
             printf("STRING\t\t\t%s\n", token.buffer);
             break;
         case TOML_TOKEN_TYPE_DOT:
-            puts("DOT");
+            puts("DOT\t\t\t.");
             break;
         case TOML_TOKEN_TYPE_COMMA:
-            puts("COMMA");
+            puts("COMMA\t\t\t,");
             break;
         case TOML_TOKEN_TYPE_LBRACKET:
-            puts("LBRACKET");
+            puts("LBRACKET\t\t[");
             break;
         case TOML_TOKEN_TYPE_RBRACKET:
-            puts("RBRACKET");
+            puts("RBRACKET\t\t]");
             break;
         case TOML_TOKEN_TYPE_LBRACE:
-            puts("LBRACE");
+            puts("LBRACE\t\t\t{");
             break;
         case TOML_TOKEN_TYPE_RBRACE:
-            puts("RBRACE");
+            puts("RBRACE\t\t\t}");
             break;
         case TOML_TOKEN_TYPE_NEWLINE:
             puts("NEWLINE");
-            break;
-        case TOML_TOKEN_TYPE_END_OF_FILE:
-            puts("END_OF_FILE");
             break;
     }
 }

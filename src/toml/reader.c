@@ -115,13 +115,10 @@ char toml_reader_next(toml_reader_t reader)
 char toml_reader_peek(toml_reader_t reader, size_t offset)
 {
     // return 0 if k >= capacity (we can't peek over the capacity of the buffer)
-    if (offset >= reader->capacity)
+    // return 0 if we reached end or will reach end on the k-th next character
+    if (offset >= reader->capacity || will_reach_end(reader, offset))
         return 0;
 
-    // return 0 if we reached end or will reach end on the k-th next character
-    if (will_reach_end(reader, offset))
-        return 0;
-    
     // if k-th next character is beyond the buffer, move characters back and read enough to fulfil
     if (reader->index + offset >= reader->capacity) {
         my_memmove(reader->buffer, &reader->buffer[reader->index], reader->capacity - reader->index);

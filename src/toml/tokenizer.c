@@ -3,14 +3,22 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+#include "utils/my_lib.h"
+
 struct toml_tokenizer {
     toml_reader_t reader;
+    toml_boolean_t reached_end;
     
     size_t capacity;
     size_t length;
     size_t index;
     toml_token_t *tokens;
 };
+
+static toml_boolean_t will_reach_end(toml_tokenizer_t tokenizer, size_t offset)
+{
+    return tokenizer->length != tokenizer->capacity && tokenizer->index + offset >= tokenizer->length;
+}
 
 static void push_token(toml_tokenizer_t tokenizer, toml_token_t token)
 {
@@ -133,17 +141,12 @@ static void on_default(toml_tokenizer_t tokenizer)
     push_token(tokenizer, toml_token_create_string(string));
 }
 
-static void tokenize_some(toml_tokenizer_t tokenizer)
+static void tokenize_some(toml_tokenizer_t tokenizer, size_t offset)
 {
-    tokenizer->length = 0;
+    tokenizer->length = offset;
     tokenizer->index = 0;
 
-    while (tokenizer->length < tokenizer->capacity) {
-        if (toml_reader_reached_end(tokenizer->reader)) {
-            push_token(tokenizer, toml_token_create_end_of_file());
-            return;
-        }
-
+    while (!toml_reader_reached_end(tokenizer->reader) && tokenizer->length < tokenizer->capacity) {
         switch(toml_reader_peek(tokenizer->reader, 0)) {
             case '\t':
             case '\r':
@@ -191,6 +194,8 @@ static void tokenize_some(toml_tokenizer_t tokenizer)
                 on_default(tokenizer);
         }
     }
+
+    tokenizer->reached_end = will_reach_end(tokenizer, 0);
 }
 
 toml_tokenizer_t toml_tokenizer_create(toml_reader_t reader)
@@ -198,10 +203,12 @@ toml_tokenizer_t toml_tokenizer_create(toml_reader_t reader)
     toml_tokenizer_t tokenizer = malloc(sizeof(struct toml_tokenizer));
 
     tokenizer->reader = reader;
+    tokenizer->reached_end = false;
     tokenizer->capacity = 8;
     tokenizer->length = 0;
     tokenizer->index = 0;
     tokenizer->tokens = malloc(tokenizer->capacity * sizeof(toml_token_t));
+    tokenize_some(tokenizer, 0);
     return tokenizer;
 }
 
@@ -211,10 +218,35 @@ void toml_tokenizer_destroy(toml_tokenizer_t tokenizer)
     free(tokenizer);
 }
 
+toml_boolean_t toml_tokenizer_reached_end(toml_tokenizer_t tokenizer)
+{
+    return tokenizer->reached_end;
+}
+
 toml_token_t toml_tokenizer_next(toml_tokenizer_t tokenizer)
 {
-    if (tokenizer->index == tokenizer->length)
-        tokenize_some(tokenizer);
+    if (tokenizer->reached_end)
+        return toml_token_create_none();
 
-    return tokenizer->tokens[tokenizer->index++];
+    toml_token_t token = tokenizer->tokens[tokenizer->index++];
+    tokenizer->reached_end = will_reach_end(tokenizer, 0);
+
+    if (tokenizer->index == tokenizer->length)
+        tokenize_some(tokenizer, 0);
+
+    return token;
+}
+
+toml_token_t toml_tokenizer_peek(toml_tokenizer_t tokenizer, size_t offset)
+{
+    if (offset >= tokenizer->capacity || will_reach_end(tokenizer, offset))
+        return toml_token_create_none();
+
+    if (tokenizer->index + offset >= tokenizer->capacity) {
+        my_memmove(tokenizer->tokens, &tokenizer->tokens[tokenizer->index], 
+                   (tokenizer->capacity - tokenizer->index) * sizeof(toml_token_t));
+        tokenize_some(tokenizer, tokenizer->capacity - tokenizer->index);
+    }
+
+    return tokenizer->tokens[tokenizer->index + offset];
 }

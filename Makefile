@@ -13,6 +13,7 @@ SRC  += utils/my_memmove.c utils/my_memset.c \
 SRC  += toml/variant.c toml/array.c toml/map.c 
 SRC  += toml/reader.c
 SRC  += toml/token.c toml/tokenizer.c
+SRC  += toml/parser.c
 OBJ  := $(SRC:%.c=%.o)
 
 # Adjustement
