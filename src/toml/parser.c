@@ -13,10 +13,17 @@ typedef struct {
     toml_map_t current;
 } context_t;
 
+/* static char *parse_string(char *string)
+{
+
+}
+
 static char *parse_key(toml_tokenizer_t tokenizer)
 {
     toml_token_t token = toml_tokenizer_next(tokenizer);
-    return token.buffer; 
+    char *key = my_strdup(token.buffer);
+    toml_token_destroy(token);
+    return key; 
 }
 
 static toml_variant_t parse_value(toml_tokenizer_t tokenizer)
@@ -45,7 +52,7 @@ static void parse_keyval(context_t *ctx, toml_tokenizer_t tokenizer)
 
     toml_map_set_integer(ctx->current, key, variant.as.integer);
     free(key);
-}
+} */
 
 toml_map_t toml_parse(char const *file)
 {
@@ -57,7 +64,9 @@ toml_map_t toml_parse(char const *file)
     toml_tokenizer_t tokenizer = toml_tokenizer_create(reader);
 
     while (!toml_tokenizer_reached_end(tokenizer)) {
-        parse_keyval(&ctx, tokenizer);
+        toml_token_t token = toml_tokenizer_next(tokenizer);
+        toml_token_print(token);
+        toml_token_destroy(token);
     }
     
     toml_tokenizer_destroy(tokenizer);

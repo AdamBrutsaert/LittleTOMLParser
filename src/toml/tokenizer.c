@@ -32,19 +32,28 @@ static void on_whitespace(toml_tokenizer_t tokenizer)
 
 static void on_newline(toml_tokenizer_t tokenizer)
 {
-    push_token(tokenizer, toml_token_create_newline());
+    size_t line = toml_reader_get_line(tokenizer->reader);
+    size_t column = toml_reader_get_column(tokenizer->reader);
+
+    push_token(tokenizer, toml_token_create_newline(line, column));
     toml_reader_next(tokenizer->reader);
 }
 
 static void on_equal(toml_tokenizer_t tokenizer)
 {
-    push_token(tokenizer, toml_token_create_equal());
+    size_t line = toml_reader_get_line(tokenizer->reader);
+    size_t column = toml_reader_get_column(tokenizer->reader);
+
+    push_token(tokenizer, toml_token_create_equal(line, column));
     toml_reader_next(tokenizer->reader);
 }
 
 static void on_double_quote(toml_tokenizer_t tokenizer)
 {
     // TODO handle triple quote 
+    size_t line = toml_reader_get_line(tokenizer->reader);
+    size_t column = toml_reader_get_column(tokenizer->reader);
+
     size_t capacity = 8;
     size_t length = 0;
     toml_string_t string = malloc(capacity * sizeof(char));
@@ -70,47 +79,68 @@ static void on_double_quote(toml_tokenizer_t tokenizer)
     }
     string[length++] = '\0';
 
-    push_token(tokenizer, toml_token_create_string(string));
+    push_token(tokenizer, toml_token_create_string(string, line, column));
 }
 
 static void on_comma(toml_tokenizer_t tokenizer)
 {
-    push_token(tokenizer, toml_token_create_comma());
+    size_t line = toml_reader_get_line(tokenizer->reader);
+    size_t column = toml_reader_get_column(tokenizer->reader);
+
+    push_token(tokenizer, toml_token_create_comma(line, column));
     toml_reader_next(tokenizer->reader);
 }
 
 static void on_dot(toml_tokenizer_t tokenizer)
 {
-    push_token(tokenizer, toml_token_create_dot());
+    size_t line = toml_reader_get_line(tokenizer->reader);
+    size_t column = toml_reader_get_column(tokenizer->reader);
+
+    push_token(tokenizer, toml_token_create_dot(line, column));
     toml_reader_next(tokenizer->reader);
 }
 
 static void on_lbracket(toml_tokenizer_t tokenizer)
 {
-    push_token(tokenizer, toml_token_create_lbracket());
+    size_t line = toml_reader_get_line(tokenizer->reader);
+    size_t column = toml_reader_get_column(tokenizer->reader);
+
+    push_token(tokenizer, toml_token_create_lbracket(line, column));
     toml_reader_next(tokenizer->reader);
 }
 
 static void on_rbracket(toml_tokenizer_t tokenizer)
 {
-    push_token(tokenizer, toml_token_create_rbracket());
+    size_t line = toml_reader_get_line(tokenizer->reader);
+    size_t column = toml_reader_get_column(tokenizer->reader);
+
+    push_token(tokenizer, toml_token_create_rbracket(line, column));
     toml_reader_next(tokenizer->reader);
 }
 
 static void on_lbrace(toml_tokenizer_t tokenizer)
 {
-    push_token(tokenizer, toml_token_create_lbrace());
+    size_t line = toml_reader_get_line(tokenizer->reader);
+    size_t column = toml_reader_get_column(tokenizer->reader);
+
+    push_token(tokenizer, toml_token_create_lbrace(line, column));
     toml_reader_next(tokenizer->reader);
 }
 
 static void on_rbrace(toml_tokenizer_t tokenizer)
 {
-    push_token(tokenizer, toml_token_create_rbrace());
+    size_t line = toml_reader_get_line(tokenizer->reader);
+    size_t column = toml_reader_get_column(tokenizer->reader);
+    
+    push_token(tokenizer, toml_token_create_rbrace(line, column));
     toml_reader_next(tokenizer->reader);
 }
 
 static void on_default(toml_tokenizer_t tokenizer)
 {
+    size_t line = toml_reader_get_line(tokenizer->reader);
+    size_t column = toml_reader_get_column(tokenizer->reader);
+
     size_t capacity = 8;
     size_t length = 0;
     toml_string_t string = malloc(capacity * sizeof(char));
@@ -138,7 +168,7 @@ static void on_default(toml_tokenizer_t tokenizer)
     }
     string[length++] = '\0';
 
-    push_token(tokenizer, toml_token_create_string(string));
+    push_token(tokenizer, toml_token_create_string(string, line, column));
 }
 
 static void tokenize_some(toml_tokenizer_t tokenizer, size_t offset)

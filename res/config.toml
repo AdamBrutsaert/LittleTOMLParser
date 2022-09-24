@@ -1,2 +1,5 @@
+[General]
+
 my_integer = 36
-test_test = 48
+my_map = { key = "hello" }
+my.dotted.key = "world"

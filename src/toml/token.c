@@ -8,79 +8,99 @@ toml_token_t toml_token_create_none()
 {
     return (toml_token_t) {
         .type = TOML_TOKEN_TYPE_NONE,
-        .buffer = nullptr
+        .buffer = nullptr,
+        .line = 0,
+        .column = 0,
     };
 }
 
-toml_token_t toml_token_create_string(char *buffer)
+toml_token_t toml_token_create_string(char *buffer, size_t line, size_t column)
 {
     return (toml_token_t) {
         .type = TOML_TOKEN_TYPE_STRING,
-        .buffer = buffer
+        .buffer = buffer,
+        .line = line,
+        .column = column
     };
 }
 
-toml_token_t toml_token_create_equal()
+toml_token_t toml_token_create_equal(size_t line, size_t column)
 {
     return (toml_token_t) {
         .type = TOML_TOKEN_TYPE_EQUAL,
-        .buffer = nullptr
+        .buffer = nullptr,
+        .line = line,
+        .column = column
     };
 }
 
-toml_token_t toml_token_create_dot()
+toml_token_t toml_token_create_dot(size_t line, size_t column)
 {
     return (toml_token_t) {
         .type = TOML_TOKEN_TYPE_DOT,
-        .buffer = nullptr
+        .buffer = nullptr,
+        .line = line,
+        .column = column
     };
 }
 
-toml_token_t toml_token_create_comma()
+toml_token_t toml_token_create_comma(size_t line, size_t column)
 {
     return (toml_token_t) {
         .type = TOML_TOKEN_TYPE_COMMA,
-        .buffer = nullptr
+        .buffer = nullptr,
+        .line = line,
+        .column = column
     };
 }
 
-toml_token_t toml_token_create_lbracket()
+toml_token_t toml_token_create_lbracket(size_t line, size_t column)
 {
     return (toml_token_t) {
         .type = TOML_TOKEN_TYPE_LBRACKET,
-        .buffer = nullptr
+        .buffer = nullptr,
+        .line = line,
+        .column = column
     };
 }
 
-toml_token_t toml_token_create_rbracket()
+toml_token_t toml_token_create_rbracket(size_t line, size_t column)
 {
     return (toml_token_t) {
         .type = TOML_TOKEN_TYPE_RBRACKET,
-        .buffer = nullptr
+        .buffer = nullptr,
+        .line = line,
+        .column = column
     };
 }
 
-toml_token_t toml_token_create_lbrace()
+toml_token_t toml_token_create_lbrace(size_t line, size_t column)
 {
     return (toml_token_t) {
         .type = TOML_TOKEN_TYPE_LBRACE,
-        .buffer = nullptr
+        .buffer = nullptr,
+        .line = line,
+        .column = column
     };
 }
 
-toml_token_t toml_token_create_rbrace()
+toml_token_t toml_token_create_rbrace(size_t line, size_t column)
 {
     return (toml_token_t) {
         .type = TOML_TOKEN_TYPE_RBRACE,
-        .buffer = nullptr
+        .buffer = nullptr,
+        .line = line,
+        .column = column
     };
 }
 
-toml_token_t toml_token_create_newline()
+toml_token_t toml_token_create_newline(size_t line, size_t column)
 {
     return (toml_token_t) {
         .type = TOML_TOKEN_TYPE_NEWLINE,
-        .buffer = nullptr
+        .buffer = nullptr,
+        .line = line,
+        .column = column
     };
 }
 
@@ -94,36 +114,38 @@ void toml_token_destroy(toml_token_t token)
 
 void toml_token_print(toml_token_t token)
 {
+    printf("[%02lu:%02lu] ", token.line, token.column);
+
     switch (token.type) {
         case TOML_TOKEN_TYPE_NONE:
-            puts("NONE");
+            fputs("NONE\n", stdout);
             break;
         case TOML_TOKEN_TYPE_EQUAL:
-            puts("EQUAL\t\t\t=");
+            fputs("EQUAL\t\t\t=\n", stdout);
             break;
         case TOML_TOKEN_TYPE_STRING:
             printf("STRING\t\t\t%s\n", token.buffer);
             break;
         case TOML_TOKEN_TYPE_DOT:
-            puts("DOT\t\t\t.");
+            fputs("DOT\t\t\t.\n", stdout);
             break;
         case TOML_TOKEN_TYPE_COMMA:
-            puts("COMMA\t\t\t,");
+            fputs("COMMA\t\t\t,\n", stdout);
             break;
         case TOML_TOKEN_TYPE_LBRACKET:
-            puts("LBRACKET\t\t[");
+            fputs("LBRACKET\t\t[\n", stdout);
             break;
         case TOML_TOKEN_TYPE_RBRACKET:
-            puts("RBRACKET\t\t]");
+            fputs("RBRACKET\t\t]\n", stdout);
             break;
         case TOML_TOKEN_TYPE_LBRACE:
-            puts("LBRACE\t\t\t{");
+            fputs("LBRACE\t\t\t{\n", stdout);
             break;
         case TOML_TOKEN_TYPE_RBRACE:
-            puts("RBRACE\t\t\t}");
+            fputs("RBRACE\t\t\t}\n", stdout);
             break;
         case TOML_TOKEN_TYPE_NEWLINE:
-            puts("NEWLINE");
+            fputs("NEWLINE\n", stdout);
             break;
     }
 }
