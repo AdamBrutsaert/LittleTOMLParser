@@ -18,7 +18,7 @@ SRC  := main.c \
         tokenizer/lbrace.c tokenizer/rbrace.c tokenizer/double_quote.c \
         tokenizer/default.c tokenizer/single_quote.c tokenizer/comment.c \
         parser/parser.c parser/string.c parser/integer.c \
-        parser/float.c \
+        parser/float.c parser/boolean.c \
         toml.c
 OBJ  := $(SRC:%.c=%.o)
 

@@ -14,3 +14,4 @@ toml_map_t *toml_parser_parse_file(char const *filename);
 toml_integer_t toml_parser_parse_integer(toml_token_t token);
 toml_float_t toml_parser_parse_float(toml_token_t token);
 toml_string_t toml_parser_parse_string(toml_token_t token);
+toml_boolean_t toml_parser_parse_boolean(toml_token_t token);
