@@ -15,4 +15,5 @@ For now, this parser won't be able to parse neither UTF-8 encoded string, multi-
 - [x] Map
 - [x] Reader
 - [x] Tokenizer
-- [ ] Parser
+- [x] Parser
+- [ ] Error Handling
