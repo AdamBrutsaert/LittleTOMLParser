@@ -2,7 +2,6 @@
 
 #include <stdlib.h>
 
-#include "toml/variant.h"
 #include "toml/memory.h"
 #include "toml/string.h"
 
@@ -113,6 +112,11 @@ static void append_node(toml_map_t *map, char *key, toml_variant_t variant)
     node->variant = variant;
     node->next = map->nodes[index];
     map->nodes[index] = node;
+}
+
+void toml_map_set(toml_map_t *map, char *key, toml_variant_t variant)
+{
+    append_node(map, key, variant);
 }
 
 void toml_map_set_integer(toml_map_t *map, char *key, toml_integer_t value)
