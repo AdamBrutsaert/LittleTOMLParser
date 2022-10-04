@@ -5,6 +5,7 @@
 toml_map_t *toml_map_create();
 void toml_map_destroy(toml_map_t *map);
 
+toml_boolean_t toml_map_exists(toml_map_t *map, char const *key);
 toml_type_t toml_map_get_type(toml_map_t *map, char const *key);
 
 toml_integer_t toml_map_get_integer(toml_map_t *map, char const *key);

@@ -56,6 +56,11 @@ static node_t *find(toml_map_t *map, char const *key)
     return nullptr;
 }
 
+toml_boolean_t toml_map_exists(toml_map_t *map, char const *key)
+{
+    return find(map, key) != nullptr;
+}
+
 toml_type_t toml_map_get_type(toml_map_t *map, char const *key)
 {
     return find(map, key)->variant.type;
