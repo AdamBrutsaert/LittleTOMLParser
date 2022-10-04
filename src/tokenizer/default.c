@@ -10,13 +10,19 @@ void toml_tokenizer_on_default(toml_file_reader_t *file_reader, toml_tokenizer_t
     size_t capacity = 8;
     size_t length = 0;
     toml_string_t string = malloc(capacity * sizeof(char));
+    
+    char c = toml_file_reader_peek(file_reader, 0);
+    toml_boolean_t is_number = c >= '0' && c <= '9';
 
     while (!toml_file_reader_end(file_reader)) {
-        char c = toml_file_reader_peek(file_reader, 0);
+        c = toml_file_reader_peek(file_reader, 0);
 
         if (c == ' ' || c == '\t' || c == '\r' || c == '\n'
-            || c == ',' || c == '.' || c == '[' || c == ']'
+            || c == ',' || c == '[' || c == ']'
             || c == '{' || c == '}' || c == '#')
+            break;
+        
+        if (!is_number && c == '.')
             break;
 
         if (capacity == length) {

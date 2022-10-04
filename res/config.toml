@@ -1,4 +1,8 @@
-[  General . "Hey" ]
+[ General . "Hey" ]
 
-world = 4156
-test.h = 12
+my_string = "test"
+my_integer = 123
+my_float = 12.56
+my_boolean = true
+
+my.dotted.key = "yay!"
