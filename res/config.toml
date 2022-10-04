@@ -1,5 +1,4 @@
-[  General . test . "é é" ]
+[  General . "Hey" ]
 
 world = 4156
-test = "ges#ge" # test
-ho = 'tes#t'
+test.h = 12

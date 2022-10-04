@@ -8,6 +8,12 @@
 int main()
 {
     toml_map_t *map = toml_parse_file("res/config.toml");
+
+    toml_map_t *m = toml_map_get_map(toml_map_get_map(map, "General"), "Hey");
+
+    printf("world = %lld\n", toml_map_get_integer(m, "world"));
+    printf("test.h = %lld\n", toml_map_get_integer(toml_map_get_map(m, "test"), "h"));
+
     toml_map_destroy(map);
 
     /* toml_token_t token = toml_token_create_string(toml_strdup("true"), 0, 0);
