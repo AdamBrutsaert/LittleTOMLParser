@@ -6,14 +6,20 @@ BUILD_DIR               := ./build
 
 # Target
 NAME := toml-c-parser
-SRC  := main.c
-SRC  += utils/my_memmove.c utils/my_memset.c \
-        utils/my_strhash.c utils/my_strlen.c utils/my_strcmp.c \
-        utils/my_strcpy.c utils/my_strdup.c
-SRC  += toml/variant.c toml/array.c toml/map.c 
-SRC  += toml/reader.c
-SRC  += toml/token.c toml/tokenizer.c
-SRC  += toml/parser.c
+SRC  := main.c \
+        memory/memmove.c memory/memset.c \
+        string/strhash.c string/strlen.c string/strcmp.c \
+        string/strcpy.c string/strncpy.c string/strdup.c \
+        types/variant.c types/array.c types/map.c \
+        file_reader.c \
+        tokenizer/token.c tokenizer/tokenizer.c tokenizer/newline.c \
+        tokenizer/newline.c tokenizer/equal.c tokenizer/dot.c \
+        tokenizer/comma.c tokenizer/lbracket.c tokenizer/rbracket.c \
+        tokenizer/lbrace.c tokenizer/rbrace.c tokenizer/double_quote.c \
+        tokenizer/default.c tokenizer/single_quote.c tokenizer/comment.c \
+        parser/parser.c parser/string.c parser/integer.c \
+        parser/float.c \
+        toml.c
 OBJ  := $(SRC:%.c=%.o)
 
 # Adjustement
@@ -25,7 +31,7 @@ OBJ  := $(addprefix $(BUILD_INTERMEDIATES_DIR)/, $(OBJ))
 CFLAGS   += -std=c99 -Wall -Wextra -Wpedantic
 CPPFLAGS += -I$(INCLUDE_DIR)
 #LDFLAGS   =
-#LDLIBS    = 
+#LDLIBS    =
 
 all: $(NAME)
 

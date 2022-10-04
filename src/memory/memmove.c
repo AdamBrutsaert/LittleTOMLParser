@@ -1,6 +1,6 @@
-#include "utils/my_lib.h"
+#include "toml/memory.h"
 
-void *my_memmove(void *dest, void const *src, size_t n)
+void *toml_memmove(void *dest, void const *src, size_t n)
 {
     if (src >= dest) {
         for (size_t i = 0; i < n; i++)

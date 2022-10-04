@@ -1,7 +1,7 @@
-#include "utils/my_lib.h"
+#include "toml/string.h"
 
 // djb2 hash
-size_t my_strhash(char const *string)
+size_t toml_strhash(char const *string)
 {
     size_t hash = 5381;
 

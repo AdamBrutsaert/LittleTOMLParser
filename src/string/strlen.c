@@ -1,6 +1,6 @@
-#include "utils/my_lib.h"
+#include "toml/string.h"
 
-size_t my_strlen(char const *string)
+size_t toml_strlen(char const *string)
 {
     size_t length = 0;
 

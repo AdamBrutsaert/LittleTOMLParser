@@ -1,5 +1,5 @@
 [General]
 
-my_integer = 36
-my_map = { key = "hello" }
-my.dotted.key = "world"
+world = 4156
+test = "ges#ge" # test
+ho = 'tes#t'

@@ -22,7 +22,6 @@ typedef struct {
     size_t column;
 } toml_token_t;
 
-
 toml_token_t toml_token_create_none();
 toml_token_t toml_token_create_string(char *buffer, size_t line, size_t column);
 toml_token_t toml_token_create_equal(size_t line, size_t column);

@@ -1,6 +1,6 @@
-#include "utils/my_lib.h"
+#include "toml/string.h"
 
-char *my_strcpy(char *dest, char const *src)
+char *toml_strcpy(char *dest, char const *src)
 {
     size_t i = 0;
 
