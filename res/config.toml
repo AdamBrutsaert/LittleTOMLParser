@@ -1,8 +1,10 @@
+my_map = { test = 3, hello = "gneigne " }
+
 [ General . "Hey" ]
 
 my_string = "test"
 my_integer = 123
 my_float = 12.56
 my_boolean = true
-
 my.dotted.key = "yay!"
+my_array = [1,2,"test"]

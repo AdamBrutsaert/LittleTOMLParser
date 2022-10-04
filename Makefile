@@ -60,6 +60,6 @@ run: all
 	@$(NAME)
 
 check: all
-	@valgrind --leak-check=yes $(NAME)
+	@valgrind --leak-check=yes $(NAME) --no-output
 
 .PHONY: all clean fclean re run check

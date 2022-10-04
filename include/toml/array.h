@@ -1,6 +1,6 @@
 #pragma once
 
-#include "type.h"
+#include "variant.h"
 
 toml_array_t *toml_array_create();
 void toml_array_destroy(toml_array_t *array);
@@ -15,6 +15,7 @@ toml_boolean_t toml_array_get_boolean(toml_array_t *array, size_t index);
 toml_array_t *toml_array_get_array(toml_array_t *array, size_t index);
 toml_map_t *toml_array_get_map(toml_array_t *array, size_t index);
 
+void toml_array_push_variant(toml_array_t *array, toml_variant_t value);
 void toml_array_push_integer(toml_array_t *array, toml_integer_t value);
 void toml_array_push_float(toml_array_t *array, toml_float_t value);
 void toml_array_push_string(toml_array_t *array, toml_string_t value);

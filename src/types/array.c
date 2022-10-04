@@ -2,8 +2,6 @@
 
 #include <stdlib.h>
 
-#include "toml/variant.h"
-
 struct toml_array {
     size_t capacity;
     size_t length;
@@ -76,6 +74,12 @@ static inline void reserve_more_if_needed(toml_array_t *array)
         array->capacity = array->capacity * 2 + !array->capacity;
         array->variants = realloc(array->variants, array->capacity * sizeof(toml_variant_t));
     }
+}
+
+void toml_array_push_variant(toml_array_t *array, toml_variant_t value)
+{
+    reserve_more_if_needed(array);
+    array->variants[array->length++] = value;
 }
 
 void toml_array_push_integer(toml_array_t *array, toml_integer_t value)
