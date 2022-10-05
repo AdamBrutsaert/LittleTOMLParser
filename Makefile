@@ -24,6 +24,7 @@ SRC  := main.c \
 OBJ  := $(SRC:%.c=%.o)
 
 # Adjustement
+LIB_NAME := $(BUILD_DIR)/lib$(NAME).so
 NAME := $(BUILD_DIR)/$(NAME)
 SRC  := $(addprefix $(SRC_DIR)/, $(SRC))
 OBJ  := $(addprefix $(BUILD_INTERMEDIATES_DIR)/, $(OBJ))
@@ -35,6 +36,15 @@ CPPFLAGS += -I$(INCLUDE_DIR)
 #LDLIBS    =
 
 all: $(NAME)
+
+lib: $(LIB_NAME)
+
+$(LIB_NAME): LDFLAGS += -shared
+$(LIB_NAME): CFLAGS += -fPIC
+$(LIB_NAME): $(OBJ)
+	@echo "Linking..."
+	@mkdir -p $(dir $(NAME))
+	@$(CC) -o$(LIB_NAME) $^ $(LDFLAGS) $(LDLIBS)
 
 $(NAME): $(OBJ)
 	@echo "Linking..."
@@ -52,7 +62,7 @@ clean:
 
 fclean: clean
 	@echo "Removing executable..."
-	@rm -f $(NAME)
+	@rm -rf $(BUILD_DIR)
 
 re: fclean all
 
@@ -62,4 +72,4 @@ run: all
 check: all
 	@valgrind --leak-check=yes $(NAME) --no-output
 
-.PHONY: all clean fclean re run check
+.PHONY: all lib clean fclean re run check
